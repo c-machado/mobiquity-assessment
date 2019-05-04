@@ -1,6 +1,7 @@
 package com.mobiquity.assessment.pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -41,16 +42,24 @@ public class MainViewPage {
     }
 
     public WebElement getUserByDisplayName(String _userName) {
-        return driver.findElement(By.xpath("//*[@id='employee-list']/li[contains(@class, 'ng-enter-active')]" +
-                "[contains(text(),'" + _userName + "')]"));
+        try{
+            WebElement employeeToGet = driver.findElement(By.xpath("//*[@id='employee-list']/li[not(contains(@class, 'ng-leave'))]" +
+                    "[contains(text(),'" + _userName + "')]"));
+            return employeeToGet;
+        }
+        catch (NoSuchElementException e){
+            return null;
+        }
     }
 
     public boolean isUserInList(String _userName) {
         WebDriverWait waitUntilUsersAreAvailable = new WebDriverWait(driver, 3);
         waitUntilUsersAreAvailable.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.cssSelector("#employee-list li"), 1));
-        WebElement newEmployee = getUserByDisplayName(_userName);
-        System.out.println("new Employeeeeeeee "+ newEmployee);
-        return newEmployee.isDisplayed();
+        WebElement employedToFind = getUserByDisplayName(_userName);
+        if(employedToFind == null){
+            return false;
+        }
+        return employedToFind.isDisplayed();
     }
 
     public void clickEditCTA() {
@@ -65,16 +74,14 @@ public class MainViewPage {
         return driver.findElements(By.cssSelector("#employee-list li:not(.ng-leave)")).size();
     }
 
-    public void clickEmployeeName() {
+    public void doubleClickEmployeeName() {
         Actions actions = new Actions(driver);
-        selectRandomEmployee();
-        actions.doubleClick().perform();
+        actions.doubleClick(getRandomEmployee()).build().perform();
     }
 
-    public void selectRandomEmployee() {
-        List<WebElement> allEmployees = employeesListDetail;
+    public WebElement getRandomEmployee() {
         Random rand = new Random();
-        int randomEmployee = rand.nextInt(allEmployees.size());
-        allEmployees.get(randomEmployee).click();
+        int randomEmployee = rand.nextInt(employeesListDetail.size());
+        return employeesListDetail.get(randomEmployee);
     }
 }
