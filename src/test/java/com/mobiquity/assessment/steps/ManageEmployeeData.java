@@ -4,7 +4,6 @@ import com.mobiquity.assessment.consts.Constants;
 import com.mobiquity.assessment.pages.CreateEmployeePage;
 import com.mobiquity.assessment.pages.LoginPage;
 import com.mobiquity.assessment.pages.MainViewPage;
-import cucumber.api.PendingException;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -13,8 +12,8 @@ import cucumber.api.java.en.When;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -149,5 +148,16 @@ public class ManageEmployeeData {
         waitUntilListIsRefreshed.until(ExpectedConditions.numberOfElementsToBeLessThan(By.cssSelector("#employee-list li:not(.ng-leave)"),listElementsCount));
 
         Assert.assertFalse(mainViewPage.isUserInList(Constants.NEW_USER_FIRST_NAME + " " + Constants.UPDATED_LAST_NAME));
+    }
+
+    @When("^I double click over an employee's name$")
+    public void iDoubleClickOverAnEmployeeSName() {
+        mainViewPage.clickEmployeeName();
+    }
+
+    @Then("^I should see the employee detailed information$")
+    public void iShouldSeeTheEmployeeDetailedInformation() {
+        Assert.assertTrue(driver.getCurrentUrl().contains("edit"));
+
     }
 }

@@ -3,10 +3,14 @@ package com.mobiquity.assessment.pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.util.List;
+import java.util.Random;
 
 public class MainViewPage {
 
@@ -17,6 +21,9 @@ public class MainViewPage {
 
     @FindBy(id = "employee-list")
     private WebElement employeeList;
+
+    @FindBy(css = "#employee-list li")
+    private List<WebElement> employeesListDetail;
 
     @FindBy(id = "bEdit")
     private WebElement editButton;
@@ -56,5 +63,18 @@ public class MainViewPage {
 
     public int getListElementsCount() {
         return driver.findElements(By.cssSelector("#employee-list li:not(.ng-leave)")).size();
+    }
+
+    public void clickEmployeeName() {
+        Actions actions = new Actions(driver);
+        selectRandomEmployee();
+        actions.doubleClick().perform();
+    }
+
+    public void selectRandomEmployee() {
+        List<WebElement> allEmployees = employeesListDetail;
+        Random rand = new Random();
+        int randomEmployee = rand.nextInt(allEmployees.size());
+        allEmployees.get(randomEmployee).click();
     }
 }
