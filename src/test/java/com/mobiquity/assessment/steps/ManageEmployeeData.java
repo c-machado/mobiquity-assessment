@@ -30,7 +30,7 @@ public class ManageEmployeeData {
     @Before
     public void setUp() {
         driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(Constants.IMPLICIT_WAIT_TIME_FRAME, TimeUnit.SECONDS);
         /** initializing the page elements */
         loginPage = new LoginPage(driver);
         mainViewPage = new MainViewPage(driver);
@@ -47,7 +47,7 @@ public class ManageEmployeeData {
 
     @Given("^I'm at the main interface view$")
     public void iMAtTheMainInterfaceView() {
-        WebDriverWait waitUntilViewIsLoaded = new WebDriverWait(driver, 5);
+        WebDriverWait waitUntilViewIsLoaded = new WebDriverWait(driver, Constants.EXPLICIT_WAIT_TIME_FRAME);
         waitUntilViewIsLoaded.until(ExpectedConditions.urlContains("employees"));
         Assert.assertTrue(driver.getCurrentUrl().contains("employees"));
     }
@@ -144,7 +144,7 @@ public class ManageEmployeeData {
     @Then("^I should not be able to find the employee$")
     public void iShouldNotBeAbleToFindTheEmployee() {
         int listElementsCount = mainViewPage.getListElementsCount();
-        WebDriverWait waitUntilListIsRefreshed = new WebDriverWait(driver, 3);
+        WebDriverWait waitUntilListIsRefreshed = new WebDriverWait(driver, Constants.EXPLICIT_WAIT_TIME_FRAME);
         waitUntilListIsRefreshed.until(ExpectedConditions.numberOfElementsToBeLessThan(By.cssSelector("#employee-list li:not(.ng-leave)"),listElementsCount));
 
         Assert.assertFalse(mainViewPage.isUserInList(Constants.NEW_USER_FIRST_NAME + " " + Constants.UPDATED_LAST_NAME));
@@ -152,12 +152,11 @@ public class ManageEmployeeData {
 
     @When("^I double click over an employee's name$")
     public void iDoubleClickOverAnEmployeeSName() {
-        mainViewPage.clickEmployeeName();
+        mainViewPage.doubleClickEmployeeName();
     }
 
-    @Then("^I should see the employee detailed information$")
+    @Then("^I should see the employee's detailed information$")
     public void iShouldSeeTheEmployeeDetailedInformation() {
         Assert.assertTrue(driver.getCurrentUrl().contains("edit"));
-
     }
 }
