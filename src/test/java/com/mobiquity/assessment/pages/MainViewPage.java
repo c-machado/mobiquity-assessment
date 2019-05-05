@@ -10,6 +10,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -31,6 +32,9 @@ public class MainViewPage {
 
     @FindBy(id = "bDelete")
     private WebElement deleteButton;
+
+    @FindBy(css = "[ng-model='selectedEmployee.email']")
+    private WebElement employeeEmail;
 
     public MainViewPage(WebDriver _driver) {
         this.driver = _driver;
@@ -83,5 +87,14 @@ public class MainViewPage {
         Random rand = new Random();
         int randomEmployee = rand.nextInt(employeesListDetail.size());
         return employeesListDetail.get(randomEmployee);
+    }
+
+    public String getEmail(){
+        Actions actions = new Actions(driver);
+        WebElement randEmployee = getRandomEmployee();
+        actions.doubleClick(randEmployee).build().perform();
+        String newElement = driver.findElement(By.cssSelector("[ng-model='selectedEmployee.email']")).getAttribute("value");
+        System.out.println("estereo "+newElement);
+        return newElement;
     }
 }

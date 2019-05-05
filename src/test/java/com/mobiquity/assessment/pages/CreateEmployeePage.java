@@ -30,6 +30,12 @@ public class CreateEmployeePage {
     @FindBy(css = "button[type='submit'][ng-hide='isCreateForm']")
     private WebElement updateEmployeeButton;
 
+    @FindBy(css = "[ng-click='browseToOverview()']")
+    private WebElement backButton;
+
+    @FindBy(css = "[ng-click='deleteEmployee()']")
+    private WebElement deleteButton;
+
     public CreateEmployeePage(WebDriver _driver) {
         this.driver = _driver;
         PageFactory.initElements(_driver,this);
@@ -67,7 +73,24 @@ public class CreateEmployeePage {
         return employeeForm.getAttribute("class").contains("ng-invalid");
     }
 
+    public boolean isEmailDuplicated() {
+        return employeeForm.getAttribute("class").contains("ng-invalid");
+    }
+
     public String getEmployeesEmail() {
         return emailField.getAttribute("value");
     }
+
+    public void clickBackButton() {
+        backButton.click();
+    }
+
+    public void clickDeleteButton() {
+        deleteButton.click();
+    }
+
+    public String getEmployeeName() {
+        return firstNameField.getAttribute("value") + " " + lastNameField.getAttribute("value");
+    }
+
 }
